@@ -1,0 +1,22 @@
+#ifndef __IMU_H__
+#define __IMU_H__
+
+#include "Pin.h"
+#include "Wire.h"
+#include <MPU6050_light.h>
+
+class Imu {
+public:
+    MPU6050 mpu;
+    byte status;
+    Imu();
+    void init();
+
+    float getAngle(char axis='z');
+
+
+};
+
+
+
+#endif // __IMU_H__
