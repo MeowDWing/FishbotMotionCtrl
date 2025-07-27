@@ -1,3 +1,9 @@
+"""
+
+    Imu 用于操作MPU8060 芯片，获取车的状态信息
+
+"""
+
 #ifndef __IMU_H__
 #define __IMU_H__
 

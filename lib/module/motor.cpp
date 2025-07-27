@@ -11,53 +11,56 @@ Motor::~Motor()
 
 void Motor::setup()
 {
+    //GPIO链接图见 ../Macro/pin.h
+
+    // 初始化脉冲计数传感器
     encoders[0].init(0, 6, 7); // 初始化第一个编码器，使用GPIO 32和33连接
     encoders[1].init(1, 18, 17); // 初始化第二个编码器，使用GPIO 26和25连接
     encoders[2].init(2, 20, 19); // 初始化第一个编码器，使用GPIO 32和33连接
     encoders[3].init(3, 11, 10); // 初始化第二个编码器，使用GPIO 26和25连接
+    // 初始化马达
     motor.attachMotor(0, 5, 4);
     motor.attachMotor(1, 15, 16);
     motor.attachMotor(2, 3, 8);
     motor.attachMotor(3, 46, 9);
-    // Initialize motor pins or settings if needed
     Serial.println("Motor setup complete.");
 }
 
-void Motor::SetTotalSpeed(int per)
+void Motor::SetTotalSpeed(int pwmRatio)
 {
-    pwm = per;
+    pwm = pwmRatio;
     // Set the speed for each motor
-    motor.updateMotorSpeed(0, per); // Set speed for motor 0
-    motor.updateMotorSpeed(1, per); // Set speed for motor 1
-    motor.updateMotorSpeed(2, per); // Set speed for motor 2
-    motor.updateMotorSpeed(3, per); // Set speed for motor 3
+    motor.updateMotorSpeed(0, pwmRatio); // Set speed for motor 0
+    motor.updateMotorSpeed(1, pwmRatio); // Set speed for motor 1
+    motor.updateMotorSpeed(2, pwmRatio); // Set speed for motor 2
+    motor.updateMotorSpeed(3, pwmRatio); // Set speed for motor 3
 
     Serial.println("Total speed set for all motors.");
 }
 
-void Motor::spin_mode(int per, bool clockwise)
+void Motor::spin_mode(int pwmRatio, bool clockwise)
 {
-    pwm = per;
+    pwm = pwmRatio;
     if (clockwise) {
-        motor.updateMotorSpeed(0, per); // Set speed for motor 0
-        motor.updateMotorSpeed(1, per); // Set speed for motor 1
-        motor.updateMotorSpeed(2, -per); // Reverse direction for motor 2
-        motor.updateMotorSpeed(3, -per); // Reverse direction for motor 3
+        motor.updateMotorSpeed(0, pwmRatio); // Set speed for motor 0
+        motor.updateMotorSpeed(1, pwmRatio); // Set speed for motor 1
+        motor.updateMotorSpeed(2, -pwmRatio); // Reverse direction for motor 2
+        motor.updateMotorSpeed(3, -pwmRatio); // Reverse direction for motor 3
     } else {
-        motor.updateMotorSpeed(0, -per); // Reverse direction for motor 0
-        motor.updateMotorSpeed(1, -per); // Reverse direction for motor 1
-        motor.updateMotorSpeed(2, per); // Set speed for motor 2
-        motor.updateMotorSpeed(3, per); // Set speed for motor 3
+        motor.updateMotorSpeed(0, -pwmRatio); // Reverse direction for motor 0
+        motor.updateMotorSpeed(1, -pwmRatio); // Reverse direction for motor 1
+        motor.updateMotorSpeed(2, pwmRatio); // Set speed for motor 2
+        motor.updateMotorSpeed(3, pwmRatio); // Set speed for motor 3
     }
 }
 
-void Motor::spin_with_angle(float angle, int speed_per, bool clockwise)
+void Motor::spin_with_angle(float angle, int speed_ratio, bool clockwise)
 {
-    spin_mode(speed_per, clockwise);
+    spin_mode(speed_ratio, clockwise);
     if(!clockwise){
         angle = -angle; // If not clockwise, reverse the angle
     }
-    Serial.printf("Spinning with angle: %.2f degrees, speed: %d, clockwise: %d\n", angle, speed_per, clockwise);
+    Serial.printf("Spinning with angle: %.2f degrees, speed: %d, clockwise: %d\n", angle, speed_ratio, clockwise);
 
     imu.mpu.update(); // Update the IMU data
     float present_angle = imu.getAngle('z'); // Get the current angle from the IMU
@@ -80,7 +83,7 @@ float Motor::_calTargetAngle(float spin_angle, float present_angle)
 {
     // Calculate the target angle based on the current angle and the desired target angle
     float target_angle = present_angle + spin_angle;
-
+    // ! Attention ! : mpu的检测支持多圈，但不清楚上限是多大，至少连续一两圈都是可以的
     // if(target_angle > 180.0f) {
     //     target_angle -= 360.0f; // Normalize to -180 to 180 range
     // } else if(target_angle < -180.0f) {

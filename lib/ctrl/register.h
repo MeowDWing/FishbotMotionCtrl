@@ -2,11 +2,6 @@
 #define __RESISTER_H__
 
 #include <Arduino.h>
-#include <queue>
-#include <utility>
-#include <vector>
-#include <ctime>
-
 #include "event.h"
 
 class Register

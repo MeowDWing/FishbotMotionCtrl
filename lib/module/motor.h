@@ -1,9 +1,12 @@
 #ifndef __MOTOR_H__
 #define __MOTOR_H__
 
+#include <utility>
+
 #include <Arduino.h>
 #include <Esp32McpwmMotor.h>
 #include <Esp32PcntEncoder.h>
+
 #include "Pin.h"
 #include "imu.h"
 
@@ -21,9 +24,9 @@ public:
     ~Motor();
 
     void setup();
-    void SetTotalSpeed(int per=70);
-    void spin_mode(int per=20, bool clockwise=true);
-    void spin_with_angle(float angle, int speed_per, bool clockwise = true);
+    void SetTotalSpeed(int pwm_ratio=70);
+    void spin_mode(int pwm_ratio=20, bool clockwise=true);
+    void spin_with_angle(float angle, int speed_ratio, bool clockwise = true);
 
 };
 

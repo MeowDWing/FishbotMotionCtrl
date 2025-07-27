@@ -2,7 +2,6 @@
 #define __EVENT_H__
 
 #include <Arduino.h>
-#include <vector>
 
 #include <ctime>
 #include "motor.h"
@@ -13,7 +12,7 @@ class CtrlEvent
 {
 public:
     int event_code; // Event code to identify the type of event
-    time_t event_time; // Time when the event occurred
+    time_t event_time; // Time when event need to execute
 
     CtrlEvent() = default;
     ~CtrlEvent() = default;

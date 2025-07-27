@@ -1,5 +1,6 @@
-#ifndef _RAY_DISTANCE
-#define _RAY_DISTANCE
+#ifndef __MEASUREMENT_H__
+#define __MEASUREMENT_H__
+
 #include"Pin.h"
 
 

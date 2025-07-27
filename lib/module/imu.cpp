@@ -4,7 +4,7 @@
 
 
 Imu::Imu() : mpu(Wire) {
-    // Constructor initializes the MPU6050 with the Wire library
+    // 设置MPU通信模式为无线通信
 }
 
 void Imu::init() {
@@ -19,8 +19,9 @@ void Imu::init() {
         Serial.println("MPU6050 initialized successfully.");
     }
 
+    // 初始化状态传感器
     Serial.println("Calculating offsets, please keep the device still...");
-    delay(1000); // Wait for a second before calculating offsets
+    delay(1000); 
     mpu.calcOffsets(true, true); // Calculate offsets for gyro and accelerometer
 }
 
@@ -33,7 +34,7 @@ float Imu::getAngle(char axis) {
         return mpu.getAngleZ();
     } else {
         Serial.println("Invalid axis specified. Use 'x', 'y', or 'z'.");
-        return 0.0f; // Return 0 for invalid axis
+        return 0.0f; 
     }
 }
 
