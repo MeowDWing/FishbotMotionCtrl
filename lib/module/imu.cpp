@@ -10,6 +10,7 @@ Imu::Imu() : mpu(Wire) {
 void Imu::init() {
     Wire.begin(I2C_SDA, I2C_SCL); // Initialize I2C with specified SDA and SCL pins
     status = mpu.begin();
+    
 
     if (status != 0) {
         // 115200 & Serial need initialize in main.cpp -> setup()

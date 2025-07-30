@@ -12,8 +12,9 @@ class ExecuteParameter
 public:
     Register& reg;
     SemaphoreHandle_t& sem;
+    Imu& imu;
 
-    ExecuteParameter(Register& r, SemaphoreHandle_t& s);
+    ExecuteParameter(Register& r, SemaphoreHandle_t& s, Imu& i);
 };
 
 class EventAddParameter

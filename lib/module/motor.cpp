@@ -39,29 +39,30 @@ void Motor::SetTotalSpeed(int pwmRatio)
     Serial.println("Total speed set for all motors.");
 }
 
-void Motor::spin_mode(int pwmRatio, bool clockwise)
+void Motor::spin_mode(int per, bool counterclockwise)
 {
-    pwm = pwmRatio;
-    if (clockwise) {
-        motor.updateMotorSpeed(0, pwmRatio); // Set speed for motor 0
-        motor.updateMotorSpeed(1, pwmRatio); // Set speed for motor 1
-        motor.updateMotorSpeed(2, -pwmRatio); // Reverse direction for motor 2
-        motor.updateMotorSpeed(3, -pwmRatio); // Reverse direction for motor 3
+    pwm = per;
+    if (!counterclockwise) {
+        motor.updateMotorSpeed(0, per); // Set speed for motor 0
+        motor.updateMotorSpeed(1, -per); // Set speed for motor 1
+        motor.updateMotorSpeed(2, per); // Reverse direction for motor 2
+        motor.updateMotorSpeed(3, -per); // Reverse direction for motor 3
     } else {
-        motor.updateMotorSpeed(0, -pwmRatio); // Reverse direction for motor 0
-        motor.updateMotorSpeed(1, -pwmRatio); // Reverse direction for motor 1
-        motor.updateMotorSpeed(2, pwmRatio); // Set speed for motor 2
-        motor.updateMotorSpeed(3, pwmRatio); // Set speed for motor 3
+        motor.updateMotorSpeed(0, -per); // Reverse direction for motor 0
+        motor.updateMotorSpeed(1, per); // Reverse direction for motor 1
+        motor.updateMotorSpeed(2, -per); // Set speed for motor 2
+        motor.updateMotorSpeed(3, per); // Set speed for motor 3
     }
 }
 
-void Motor::spin_with_angle(float angle, int speed_ratio, bool clockwise)
+void Motor::spin_with_angle(float angle, int speed_per, bool counterclockwise)
 {
-    spin_mode(speed_ratio, clockwise);
-    if(!clockwise){
-        angle = -angle; // If not clockwise, reverse the angle
+    spin_mode(speed_per, counterclockwise);
+    // float angle_buchang = -22.0f;
+    if(!counterclockwise){
+        angle = -angle; // If not counterclockwise, reverse the angle
     }
-    Serial.printf("Spinning with angle: %.2f degrees, speed: %d, clockwise: %d\n", angle, speed_ratio, clockwise);
+    Serial.printf("Spinning with angle: %.2f degrees, speed: %d, counterclockwise: %d\n", angle, speed_per, counterclockwise);
 
     imu.mpu.update(); // Update the IMU data
     float present_angle = imu.getAngle('z'); // Get the current angle from the IMU
@@ -69,11 +70,11 @@ void Motor::spin_with_angle(float angle, int speed_ratio, bool clockwise)
 
     printf("Current angle: %.2f, Target angle: %.2f\n", imu.getAngle('z'), target_angle);
     while(
-        clockwise ? imu.getAngle() < target_angle : imu.getAngle() > target_angle
+        counterclockwise ? imu.getAngle() < target_angle : imu.getAngle() > target_angle
     ) {
         printf("Current angle: %.2f, Target angle: %.2f\n", imu.getAngle('z'), target_angle);
         // Continuously check the angle until the target angle is reached
-        delay(100); // Add a small delay to avoid busy-waiting
+        delay(10); // Add a small delay to avoid busy-waiting
         imu.mpu.update(); // Update the IMU data
     }
     spin_mode(0, true); // Stop the motors after reaching the target angle

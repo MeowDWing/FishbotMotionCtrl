@@ -1,7 +1,7 @@
 #include "task.h"
 
-ExecuteParameter::ExecuteParameter(Register& r, SemaphoreHandle_t& s)
-    : reg(r), sem(s) {
+ExecuteParameter::ExecuteParameter(Register& r, SemaphoreHandle_t& s, Imu& i)
+    : reg(r), sem(s), imu(i) {
     // Constructor initializes the ExecuteParameter with a Register reference and a SemaphoreHandle
 }
 
