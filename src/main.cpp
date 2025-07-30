@@ -10,7 +10,7 @@
 #include "Pin.h"
 #include "motor.h"
 #include "register.h"
-#include "mearsurement.h"
+#include "measurement.h"
 #include "task.h"
 
 
@@ -74,17 +74,14 @@ void EventAddThread(void* pvParameters)
 void setup()
 {
     Serial.begin(115200); // 初始化串口通信，设置通信速率为115200
-    Serial.println("setup is running...");
     imu.init(); // Initialize the IMU
-    Serial.println("setup is running...");
     motor.setup();
-    Serial.println("setup is running...");
     Uls::init();
-    Serial.println("setup is running...");
+
     
     
 
-    Serial.println("start thread1");
+    Serial.println("Launching Event Execute Thread.");
     xTaskCreatePinnedToCore(
         ExecuteThread, // Function to be executed
         "ExecuteThread", // Name of the task
@@ -94,7 +91,7 @@ void setup()
         NULL, // Task handle
         1 // Core to run the task on (1 for core 1)
     );
-    Serial.println("start thread2");
+    Serial.println("Launching Event Addition Thread.");
     xTaskCreatePinnedToCore(
         EventAddThread, // Function to be executed
         "EventAddThread", // Name of the task

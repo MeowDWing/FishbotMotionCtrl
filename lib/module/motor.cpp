@@ -24,6 +24,7 @@ void Motor::setup()
     motor.attachMotor(2, 3, 8);
     motor.attachMotor(3, 46, 9);
     Serial.println("Motor setup complete.");
+
 }
 
 void Motor::SetTotalSpeed(int pwmRatio)

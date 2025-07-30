@@ -1,4 +1,5 @@
 #ifndef __PIN_DEFINE__
+#define __PIN_DEFINE__
 
 // ultrasound pins
 #define Ultrasound_TRIG 21
@@ -38,7 +39,8 @@
 #ifndef __EVENT_CODE__
 #define __EVENT_CODE__
 
-// Define event codes for inter-Thread communication
+// Define event codes for status code
+#define STATUS_NOT_GOT -0x01
 #define SPIN_EVENT 0x81
 #define SET_SPEED_EVENT 0x82
 

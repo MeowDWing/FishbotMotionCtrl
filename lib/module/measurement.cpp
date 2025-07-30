@@ -9,13 +9,13 @@ namespace Uls {
     }
 
     float getDistance(int delta_time) {
-        """
+        /*
             param::
                 delta_time - 脉冲时长，默认为10ms脉冲
             
             return::
                 单位 cm
-        """
+        */
 
         digitalWrite(Ultrasound_TRIG, HIGH);
         delayMicroseconds(delta_time);

@@ -38,3 +38,8 @@ float Imu::getAngle(char axis) {
     }
 }
 
+bool Imu::dynamicModification(){
+    // mpu修正项
+    return false;
+}
+

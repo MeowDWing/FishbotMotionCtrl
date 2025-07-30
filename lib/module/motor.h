@@ -17,6 +17,7 @@ private:
 public:
     int pwm;
     Imu &imu;
+    int current_status_code=-1;
     Esp32PcntEncoder encoders[4]; // 创建一个数组用于存储四个编码器
     Esp32McpwmMotor motor;
     Motor() = delete;
@@ -24,8 +25,12 @@ public:
     ~Motor();
 
     void setup();
+
+    int getStatus();
+
     void SetTotalSpeed(int pwm_ratio=70);
     void spin_mode(int pwm_ratio=20, bool clockwise=true);
+
     void spin_with_angle(float angle, int speed_ratio, bool clockwise = true);
 
 };
