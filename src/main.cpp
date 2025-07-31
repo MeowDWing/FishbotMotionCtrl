@@ -66,7 +66,7 @@ void EventAddThread(void* pvParameters)
         }else{
           CtrlEvent* event = new SpinEvent(3600.0f, 80, true, m); // Create a SpinEvent
         } 
-          handler.register_event(event); // Register the event
+          handler.registerEvent(event); // Register the event
           Serial.println("Succ to register SpinEvent");
           xSemaphoreTake(sem, portMAX_DELAY); 
       }
@@ -113,7 +113,8 @@ void setup()
 }
 
 void loop(){
-  
+  Serial.printf("[DEBUG!] Current Angle: %.2f, ...\n", imu.getAngle('z'));
+  delay(100);
 }
 
 

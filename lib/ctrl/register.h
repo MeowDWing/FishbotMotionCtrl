@@ -11,6 +11,6 @@ public:
 
     Register();
     ~Register() = default;
-    bool register_event(CtrlEvent* event);
+    bool registerEvent(CtrlEvent* event);
 };
 #endif // __RESISTER_H__

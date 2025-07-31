@@ -28,10 +28,10 @@ public:
 
     int getStatus();
 
-    void SetTotalSpeed(int pwm_ratio=70);
-    void spin_mode(int pwm_ratio=20, bool clockwise=true);
+    void setTotalSpeed(int pwm_ratio=70);
+    void spinMode(int pwm_ratio=20, bool clockwise=true);
 
-    void spin_with_angle(float angle, int speed_ratio, bool clockwise = true);
+    void spinWithAngle(float angle, int speed_ratio, bool clockwise = true);
 
 };
 

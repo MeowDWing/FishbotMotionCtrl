@@ -9,7 +9,7 @@ Register::Register()
 }
 
 
-bool Register::register_event(CtrlEvent* event){
+bool Register::registerEvent(CtrlEvent* event){
     int real_time = time(nullptr);
     event->event_time = real_time; // Set the event time to the current time
 

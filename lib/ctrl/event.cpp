@@ -17,8 +17,13 @@ void SpinEvent::execute() {
     Serial.println("SpinEvent::execute() called");
     int pwm_value = m.pwm;
     Serial.println("pwm update");
-    m.spin_with_angle(angle, speed, clockwise);
-    m.SetTotalSpeed(pwm_value); // Set the total speed for all motors
+    m.setTotalSpeed(0);
+    // 在每个转向时重置角度积分，减少误差
+    delay(1000);
+    m.imu.mpu.calcOffsets(true,true);
+    delay(1000);
+    m.spinWithAngle(angle, speed, clockwise);
+    m.setTotalSpeed(pwm_value); // Set the total speed for all motors
 
 }
 
@@ -30,5 +35,5 @@ StraightEvent::StraightEvent(int spd, Motor& motor_instance)
 }
 
 void StraightEvent::execute() {
-    m.SetTotalSpeed(speed);
+    m.setTotalSpeed(speed);
 }
