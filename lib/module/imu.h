@@ -20,8 +20,12 @@ public:
 
     float getAngle(char axis='z');
 
+    bool resetAngleZ();
+
     bool dynamicModification();
 
+private:
+    float angle_z;
 
 };
 

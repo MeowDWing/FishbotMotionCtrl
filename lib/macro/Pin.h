@@ -44,6 +44,13 @@
 #define SPIN_EVENT 0x81
 #define SET_SPEED_EVENT 0x82
 
+// running mode code
+#define MODE_NUM 4
+#define DEBUG_MODE 0
+#define RECT_MODE 1
+#define CYCLE_MODE 2
+#define LINE_MODE 3
+
 
 #endif
 

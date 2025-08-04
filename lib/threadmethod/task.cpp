@@ -1,4 +1,5 @@
 #include "task.h"
+#include "config.hpp"
 
 ExecuteParameter::ExecuteParameter(QueueHandle_t& q, SemaphoreHandle_t& s, Imu& i)
     : queue(q), sem(s), imu(i) {
@@ -20,7 +21,6 @@ bool EventRegister::registerEvent(CtrlEvent* event){
     int real_time = time(nullptr);
     event->event_time = real_time; // Set the event time to the current time
 
-
     if (xQueueSend(handler, &event, portMAX_DELAY) != pdTRUE) {
         Serial.println("Failed to register event.");
         return false; // Return false if the event could not be registered
@@ -33,12 +33,12 @@ bool EventRegister::registerEvent(CtrlEvent* event){
 void rectMode(Motor& motor, EventRegister& handler,SemaphoreHandle_t& sem)
 {
     float distance2barrier = Uls::getDistance(); // 获取距离障碍物的距离
-    if(distance2barrier < 100.0f) { // If the distance is less than 20 cm
+    if(distance2barrier < DEFAULT_TURN_DISTANCE) { // If the distance is less than 20 cm
         CtrlEvent* event = nullptr;
-        if(distance2barrier<10.0f){
-          CtrlEvent* event = new StraightEvent(0, motor); 
+        if(distance2barrier<5.0f){
+          event = new StraightEvent(0, motor); 
         }else{
-          CtrlEvent* event = new SpinEvent(3600.0f, 80, true, motor); // Create a SpinEvent
+          event = new SpinEvent(90.0f, 80, true, motor); // Create a SpinEvent
         } 
           handler.registerEvent(event); // Register the event
           Serial.println("Succ to register SpinEvent");

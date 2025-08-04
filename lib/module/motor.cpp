@@ -1,5 +1,5 @@
 #include "motor.h"
-
+#include "config.hpp"
 
 Motor::Motor(int init_pwm, Imu& i):pwm(init_pwm),imu(i)
 {
@@ -30,6 +30,7 @@ void Motor::setup()
 void Motor::setTotalSpeed(int pwmRatio)
 {
     pwm = pwmRatio;
+    pwmRatio = -pwmRatio;
     // Set the speed for each motor
     motor.updateMotorSpeed(0, pwmRatio); // Set speed for motor 0
     motor.updateMotorSpeed(1, pwmRatio); // Set speed for motor 1

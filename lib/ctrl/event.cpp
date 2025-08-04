@@ -18,11 +18,8 @@ void SpinEvent::execute() {
     int pwm_value = m.pwm;
     Serial.println("pwm update");
     m.setTotalSpeed(0);
-    // 在每个转向时重置角度积分，减少误差
     delay(1000);
-    m.imu.mpu.calcOffsets(true,true);
-    delay(1000);
-    m.spinWithAngle(angle, speed, clockwise);
+    m.spinWithAngle(angle*8.0f/9.0f, speed, clockwise);
     m.setTotalSpeed(pwm_value); // Set the total speed for all motors
 
 }

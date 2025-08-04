@@ -6,6 +6,9 @@
 #include <Arduino.h>
 #include <Esp32PcntEncoder.h>
 
+// config files
+#include "config.hpp"
+
 // custom libraries
 #include "Pin.h"
 #include "motor.h"
@@ -22,18 +25,18 @@ EventRegister reg{}; // Create an instance of the Register class
 
 
 SemaphoreHandle_t sem = xSemaphoreCreateBinary(); // Create a binary semaphore
-ExecuteParameter execParam(reg, sem, imu); // Create an ExecuteParameter instance
+ExecuteParameter execParam(reg.handler, sem, imu); // Create an ExecuteParameter instance
 EventAddParameter eventAddParam(reg, sem, motor); // Create an EventAddParameter
 
 void ExecuteThread(void* pvParameters)
 {
   ExecuteParameter* param = static_cast<ExecuteParameter*>(pvParameters);
-  EventRegister& reg = param->reg;
+  QueueHandle_t& handler = param->queue;
   SemaphoreHandle_t& sem = param->sem;
 
   while (true) {
     CtrlEvent *event = nullptr;;
-        if (xQueueReceive(reg.handler, &event, portMAX_DELAY) == pdTRUE)
+        if (xQueueReceive(handler, &event, portMAX_DELAY) == pdTRUE)
         {
           event->execute(); // 执行事件
           xSemaphoreGive(sem); // 释放信号量
@@ -54,14 +57,13 @@ void EventAddThread(void* pvParameters)
   Motor& m = param->motor;
 
 
-
   while (true) {
       
-      rectMode(m, handler, sem);
-      // Implement the logic to create and register an event
+    rectMode(m, handler, sem);
+    // Implement the logic to create and register an event
 
 
-      delay(10);
+    delay(10);
   }
 }
 
@@ -76,29 +78,30 @@ void setup()
 
     Serial.println("Launching Event Execute Thread.");
     xTaskCreatePinnedToCore(
-        ExecuteThread, // Function to be executed
-        "ExecuteThread", // Name of the task
-        4096, // Stack size
-        &execParam, // Parameter to pass to the task
-        1, // Task priority
-        NULL, // Task handle
-        1 // Core to run the task on (1 for core 1)
+      ExecuteThread, // Function to be executed
+      "ExecuteThread", // Name of the task
+      4096, // Stack size
+      &execParam, // Parameter to pass to the task
+      1, // Task priority
+      NULL, // Task handle
+      1 // Core to run the task
     );
     Serial.println("Launching Event Addition Thread.");
     xTaskCreatePinnedToCore(
-        EventAddThread, // Function to be executed
-        "EventAddThread", // Name of the task
-        4096, // Stack size
-        &eventAddParam, // Parameter to pass to the task
-        1,
-        NULL,
-        0 // Core to run the task on (1 for core 1)
-        );
+      EventAddThread, // Function to be executed
+      "EventAddThread", // Name of the task
+      8192, // Stack size
+      &eventAddParam, // Parameter to pass to the task
+      1,
+      NULL,
+      0 // Core to run the task
+    );
 
 
 }
 
 void loop(){
+  imu.mpu.update();
   Serial.printf("[DEBUG!] Current Angle: %.2f, ...\n", imu.getAngle('z'));
   delay(100);
 }

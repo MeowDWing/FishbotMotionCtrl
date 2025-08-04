@@ -11,6 +11,22 @@
 #include "Pin.h"
 
 /* 
+---------------------EventAdd线程处理类----------------------
+*/
+class EventRegister
+{
+public:
+    QueueHandle_t handler;
+
+    EventRegister();
+    ~EventRegister() = default;
+    
+    bool registerEvent(CtrlEvent* event);
+
+
+};
+
+/* 
 ---------------------线程参数设置----------------------
 */
 class ExecuteParameter
@@ -20,7 +36,7 @@ public:
     SemaphoreHandle_t& sem;
     Imu& imu;
 
-    ExecuteParameter(QueueHandle_t& r, SemaphoreHandle_t& s, Imu& i);
+    ExecuteParameter(QueueHandle_t& q, SemaphoreHandle_t& s, Imu& i);
 };
 
 class EventAddParameter
@@ -34,24 +50,7 @@ public:
 };
 
 
-/* 
----------------------EventAdd线程处理类----------------------
-*/
-class EventRegister
-{
-public:
-    QueueHandle_t handler;
 
-    EventRegister();
-    ~EventRegister() = default;
-
-    // 事件分发阶段
-    void threadModeCheckIn();
-    
-    bool registerEvent(CtrlEvent* event);
-
-
-};
 
 void debugMode(void* pvParam);
 

@@ -4,6 +4,7 @@
 
 
 Imu::Imu() : mpu(Wire) {
+    angle_z = 0.0f;
     // 设置MPU通信模式为无线通信
 }
 
@@ -24,6 +25,14 @@ void Imu::init() {
     Serial.println("Calculating offsets, please keep the device still...");
     delay(1000); 
     mpu.calcOffsets(true, true); // Calculate offsets for gyro and accelerometer
+    angle_z = mpu.getAngleZ();
+}
+
+bool Imu::resetAngleZ()
+{
+    mpu.update();
+    angle_z = mpu.getAngleZ();
+    return true;
 }
 
 float Imu::getAngle(char axis) {
@@ -32,7 +41,7 @@ float Imu::getAngle(char axis) {
     } else if (axis == 'y') {
         return mpu.getAngleY();
     } else if (axis == 'z') {
-        return mpu.getAngleZ();
+        return mpu.getAngleZ() - angle_z;
     } else {
         Serial.println("Invalid axis specified. Use 'x', 'y', or 'z'.");
         return 0.0f; 
