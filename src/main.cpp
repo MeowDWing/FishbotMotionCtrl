@@ -7,7 +7,7 @@
 #include <Esp32PcntEncoder.h>
 
 // config files
-#include "config.hpp"
+#include "configure.h"
 
 // custom libraries
 #include "Pin.h"
@@ -101,9 +101,10 @@ void setup()
 }
 
 void loop(){
+
   imu.mpu.update();
-  Serial.printf("[DEBUG!] Current Angle: %.2f, ...\n", imu.getAngle('z'));
-  delay(100);
+  Serial.printf("[DEBUG!] Current Angle: %.2f, dist: %.2f,...\n", imu.getAngle('z'), Uls::getDistance());
+  delay(10);
 }
 
 

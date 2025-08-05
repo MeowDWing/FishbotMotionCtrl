@@ -19,7 +19,7 @@ void SpinEvent::execute() {
     Serial.println("pwm update");
     m.setTotalSpeed(0);
     delay(1000);
-    m.spinWithAngle(angle*8.0f/9.0f, speed, clockwise);
+    m.spinWithAngle(angle*77.0f/90.0f, speed, clockwise);
     m.setTotalSpeed(pwm_value); // Set the total speed for all motors
 
 }

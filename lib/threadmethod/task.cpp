@@ -1,5 +1,5 @@
 #include "task.h"
-#include "config.hpp"
+#include "configure.h"
 
 ExecuteParameter::ExecuteParameter(QueueHandle_t& q, SemaphoreHandle_t& s, Imu& i)
     : queue(q), sem(s), imu(i) {

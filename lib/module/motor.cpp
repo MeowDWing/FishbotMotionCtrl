@@ -1,5 +1,5 @@
 #include "motor.h"
-#include "config.hpp"
+#include "configure.h"
 
 Motor::Motor(int init_pwm, Imu& i):pwm(init_pwm),imu(i)
 {
@@ -66,6 +66,7 @@ void Motor::spinWithAngle(float angle, int speed_pwmRatio, bool counterclockwise
     Serial.printf("Spinning with angle: %.2f degrees, speed: %d, counterclockwise: %d\n", angle, speed_pwmRatio, counterclockwise);
 
     imu.mpu.update(); // Update the IMU data
+    imu.resetAngleZ(); // Reset the angle to zero before starting the spin
     float present_angle = imu.getAngle('z'); // Get the current angle from the IMU
     float target_angle = _calTargetAngle(angle, present_angle); // Calculate the target angle
 
